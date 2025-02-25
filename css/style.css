@@ -4,7 +4,15 @@
     box-sizing: border-box;
     font-family: sans-serif;
 }
-
+body{
+    height: 100vh;
+}
+.container{
+    width: 1250px;
+    margin: 100px auto;
+    height: 70vmin;
+    align-items: center;
+}
 input{
     flex: 1;
     border: none;
@@ -27,4 +35,7 @@ button{
 }
 .result{
     margin-top: 50px;
+}
+p{
+    margin-left: 10px;
 }
