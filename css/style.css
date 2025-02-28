@@ -7,12 +7,6 @@
 body{
     height: 100vh;
 }
-.container{
-    width: 1250px;
-    margin: 100px auto;
-    height: 70vmin;
-    align-items: center;
-}
 input{
     flex: 1;
     border: none;
@@ -20,8 +14,11 @@ input{
     background: transparent;
     padding: 10px;
     font-weight: 14px;
-    margin-bottom: 10px;
 }
+#submit-btn{
+    margin-left: 150px;
+    /* margin-top: 50px; */
+ }
 button{
     border: none;
     outline: none;
@@ -31,11 +28,14 @@ button{
     font-size: 16px;
     cursor: pointer;
     border-radius: 40px;
-    margin-bottom: 10px;
 }
-.result{
-    margin-top: 50px;
-}
-p{
-    margin-left: 10px;
-}
+.cabin {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #000;
+  }
+  .cabin .spot {
+    margin: 5px;
+  }

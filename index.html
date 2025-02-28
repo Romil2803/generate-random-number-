@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <input type="text" id="newInput" placeholder="Enter text"/>
-  <button id="addButton">Add Text</button>
-  <div id="textContainer"></div>
-  <button id="submitButton" style="display: none;">Submit</button>
-  <div id="result"></div>
+  <h1>Cabin Seating</h1>
+  <input type="text" id="name" placeholder="Enter name">
+  <button id="btn" onclick="storeName()">Store Name</button> <br>
+
+
+  <label for="cabin1-spots">Cabin 1 (Enter number of spots):</label>
+  <input type="number" id="cabin1-spots" placeholder="Enter spots for Cabin 1" min="1" max="6" value="6">
+  <button onclick="setCabinSpots(1)">Set Cabin 1 Spots</button>
+
+  <br><br>
+
+  <label for="cabin2-spots">Cabin 2 (Enter number of spots):</label>
+  <input type="number" id="cabin2-spots" placeholder="Enter spots for Cabin 2" min="1" max="6" value="6">
+  <button onclick="setCabinSpots(2)">Set Cabin 2 Spots</button>
+
+  <br><br>
+
+  <label for="cabin3-spots">Cabin 3 (Enter number of spots):</label>
+  <input type="number" id="cabin3-spots" placeholder="Enter spots for Cabin 3" min="1" max="6" value="6">
+  <button onclick="setCabinSpots(3)">Set Cabin 3 Spots</button>
+  <button id="submit-btn" onclick="assignAndDisplayNames()">Submit</button> <br>
+  <div id="cabins"></div>
+
+
+<script>
+  const input = document.getElementById("name");
+  const btn = document.getElementById("btn");
+  btn.addEventListener("click",()=>{
+    const value= input.value;
+    console.log(value);
+  })
+</script>
   <script src="./js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cabin Seating</title>
+  <style>
+    .cabin {
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      padding: 10px;
+      border: 2px solid #000;
+    }
+    .cabin .spot {
+      margin: 5px;
+    }
+    #stored-names-list {
+      margin-top: 10px;
+      font-style: italic;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cabin Seating</h1>
+
+  <!-- Store name input -->
+  <label for="name">Enter Name:</label>
+  <input type="text" id="name" placeholder="Enter name">
+  <button onclick="storeName()">Store Name</button>
+
+  <br><br>
+
+  <!-- Input for spots per cabin -->
+  <label for="cabin1-spots">Cabin 1 (Enter number of spots):</label>
+  <input type="number" id="cabin1-spots" placeholder="Enter spots for Cabin 1" min="1" value="6">
+  <button onclick="setCabinSpots(1)">Set Cabin 1 Spots</button>
+
+  <br><br>
+
+  <label for="cabin2-spots">Cabin 2 (Enter number of spots):</label>
+  <input type="number" id="cabin2-spots" placeholder="Enter spots for Cabin 2" min="1" value="6">
+  <button onclick="setCabinSpots(2)">Set Cabin 2 Spots</button>
+
+  <br><br>
+
+  <label for="cabin3-spots">Cabin 3 (Enter number of spots):</label>
+  <input type="number" id="cabin3-spots" placeholder="Enter spots for Cabin 3" min="1" value="6">
+  <button onclick="setCabinSpots(3)">Set Cabin 3 Spots</button>
+
+  <br><br>
+
+  <button onclick="assignAndDisplayNames()">Submit</button>
+
+  <div id="cabins">
+    <!-- Cabins will be displayed here after submitting -->
+  </div>
+
+  <div id="stored-names-list">
+    <!-- List of stored names will be shown here -->
+  </div>
+
+ <!-- <script>
+const cabins = [
+  { cabin: 1, spots: [1, 2, 3, 4, 5, 6], nameCount: 0, maxNames: 6 }, 
+  { cabin: 2, spots: [7, 8, 9, 10, 11, 12], nameCount: 0, maxNames: 6 }, 
+  { cabin: 3, spots: [13, 14, 15, 16, 17, 18], nameCount: 0, maxNames: 6 } 
+];
+
+function storeName() {
+  const nameInput = document.getElementById("name").value.trim();
+
+  let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
+  if (storedNames.length >= 18) {
+    alert("You can only store up to 18 names.");
+    document.getElementById("name").value = "";
+    return;
+  }
+
+  if (nameInput !== "") {
+    storedNames.push(nameInput); 
+    localStorage.setItem('storedNames', JSON.stringify(storedNames));  
+
+    document.getElementById("name").value = "";
+    displayStoredNames();
+  }
+}
+
+function setCabinSpots(cabinNumber) {
+  const spotsInput = document.getElementById(`cabin${cabinNumber}-spots`).value;
+  const cabin = cabins[cabinNumber - 1];
+  
+  if (spotsInput >= 1 && spotsInput <= cabin.spots.length) {
+    cabin.maxNames = spotsInput;
+    cabin.nameCount = 0; // Reset name count when updating spots
+  } else {
+    alert("Please enter a valid number of spots.");
+  }
+}
+
+function assignAndDisplayNames() {
+  // First, get the values entered for cabin spots
+  const cabin1Val = parseInt(document.getElementById("cabin1-spots").value) || 0;
+  const cabin2Val = parseInt(document.getElementById("cabin2-spots").value) || 0;
+  const cabin3Val = parseInt(document.getElementById("cabin3-spots").value) || 0;
+  
+  const totalVal = cabin1Val + cabin2Val + cabin3Val;
+
+  if (totalVal === 0) {
+    alert("Please enter the number of spots for each cabin.");
+    return;
+  }
+
+  // Get the stored names
+  const names = JSON.parse(localStorage.getItem('storedNames'));
+  if (!names || names.length === 0) {
+    alert("No names stored! Please store names first.");
+    return;
+  }
+
+  // Ensure the number of names to be assigned does not exceed the available spots
+  if (names.length < totalVal) {
+    alert("Not enough names stored! Please store more names.");
+    return;
+  }
+
+  // Shuffle the names to assign randomly
+  const shuffledNames = [...names];
+  for (let i = shuffledNames.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
+  }
+
+  let nameIndex = 0;
+
+  // Loop through cabins and assign names to spots
+  cabins.forEach(cabin => {
+    for (let i = 0; i < cabin.spots.length && nameIndex < shuffledNames.length && cabin.nameCount < cabin.maxNames; i++) {
+      if (nameIndex < shuffledNames.length) {
+        if (cabin.nameCount < cabin.maxNames) {
+          cabin.spots[i] = `${cabin.spots[i]}: ${shuffledNames[nameIndex++]}`;
+          cabin.nameCount++;
+        }
+      }
+    }
+  });
+
+  // Display the cabins with assigned names
+  displayCabins();
+}
+
+function displayCabins() {
+  const cabinsContainer = document.getElementById('cabins');
+  cabinsContainer.innerHTML = ''; // Clear existing display
+
+  // Loop through each cabin and create HTML elements to display
+  cabins.forEach(cabin => {
+    const cabinDiv = document.createElement('div');
+    cabinDiv.classList.add('cabin');
+    cabinDiv.innerHTML = `<strong>Cabin ${cabin.cabin}</strong>`; // Add cabin title
+
+    // Display each spot in the cabin with name (if assigned)
+    cabin.spots.forEach(spot => {
+      const spotDiv = document.createElement('div');
+      spotDiv.classList.add('spot');
+      spotDiv.innerHTML = `${spot}`; // Display the spot (e.g., "1: John Doe")
+      cabinDiv.appendChild(spotDiv);
+    });
+
+    cabinsContainer.appendChild(cabinDiv);
+  });
+}
+
+function displayStoredNames() {
+  const namesContainer = document.getElementById('stored-names');
+  const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+  
+  namesContainer.innerHTML = ''; // Clear previous list
+  
+  storedNames.forEach(name => {
+    const nameDiv = document.createElement('div');
+    nameDiv.classList.add('name');
+    nameDiv.innerHTML = name;
+    namesContainer.appendChild(nameDiv);
+  });
+}
+
+function refreshPage() {
+  window.location.reload();
+}
+
+  </script> -->
+
+<!-- <script>
+  const cabins = [
+  { cabin: 1, spots: [1, 2, 3, 4, 5, 6], nameCount: 0, maxNames: 6 }, 
+  { cabin: 2, spots: [7, 8, 9, 10, 11, 12], nameCount: 0, maxNames: 6 }, 
+  { cabin: 3, spots: [13, 14, 15, 16, 17, 18], nameCount: 0, maxNames: 6 } 
+];
+
+function storeName() {
+  const nameInput = document.getElementById("name").value.trim();
+
+  let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
+  // No restrictions on name count anymore, we can store unlimited names.
+  if (nameInput !== "") {
+    storedNames.push(nameInput); 
+    localStorage.setItem('storedNames', JSON.stringify(storedNames));  
+
+    document.getElementById("name").value = ""; // Reset input field
+    displayStoredNames(); // Display stored names list
+  }
+}
+
+function setCabinSpots(cabinNumber) {
+  const spotsInput = parseInt(document.getElementById(`cabin${cabinNumber}-spots`).value, 10);
+  const cabin = cabins[cabinNumber - 1];
+
+  // Dynamically increase spots if the new input is larger than the current number of spots
+  if (spotsInput > cabin.spots.length) {
+    for (let i = cabin.spots.length + 1; i <= spotsInput; i++) {
+      cabin.spots.push(i); // Add more spots to the cabin
+    }
+  } else if (spotsInput < cabin.spots.length) {
+    // Optionally, you can also allow users to decrease spots, if needed.
+    cabin.spots = cabin.spots.slice(0, spotsInput);
+  }
+
+  cabin.maxNames = spotsInput; // Update maxNames to the new number of spots
+  cabin.nameCount = 0; // Reset name count for this cabin
+}
+
+function assignAndDisplayNames() {
+  // Get the values entered for cabin spots
+  const cabin1Val = parseInt(document.getElementById("cabin1-spots").value, 10) || 0;
+  const cabin2Val = parseInt(document.getElementById("cabin2-spots").value, 10) || 0;
+  const cabin3Val = parseInt(document.getElementById("cabin3-spots").value, 10) || 0;
+  
+  const totalVal = cabin1Val + cabin2Val + cabin3Val;
+
+  if (totalVal === 0) {
+    alert("Please enter the number of spots for each cabin.");
+    return;
+  }
+
+  // Get the stored names
+  const names = JSON.parse(localStorage.getItem('storedNames'));
+  if (!names || names.length === 0) {
+    alert("No names stored! Please store names first.");
+    return;
+  }
+
+  // Ensure the number of names to be assigned does not exceed the available spots
+  if (names.length < totalVal) {
+    alert("Not enough names stored! Please store more names.");
+    return;
+  }
+
+  // Shuffle the names to assign randomly
+  const shuffledNames = [...names];
+  for (let i = shuffledNames.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
+  }
+
+  let nameIndex = 0;
+
+  // Loop through cabins and assign names to spots
+  cabins.forEach(cabin => {
+    for (let i = 0; i < cabin.spots.length && nameIndex < shuffledNames.length && cabin.nameCount < cabin.maxNames; i++) {
+      if (nameIndex < shuffledNames.length) {
+        if (cabin.nameCount < cabin.maxNames) {
+          cabin.spots[i] = `${cabin.spots[i]}: ${shuffledNames[nameIndex++]}`;
+          cabin.nameCount++;
+        }
+      }
+    }
+  });
+
+  // Display the cabins with assigned names
+  displayCabins();
+}
+
+function displayCabins() {
+  const cabinsContainer = document.getElementById('cabins');
+  cabinsContainer.innerHTML = ''; // Clear existing display
+
+  // Loop through each cabin and create HTML elements to display
+  cabins.forEach(cabin => {
+    const cabinDiv = document.createElement('div');
+    cabinDiv.classList.add('cabin');
+    cabinDiv.innerHTML = `<strong>Cabin ${cabin.cabin}</strong>`; // Add cabin title
+
+    // Display each spot in the cabin with name (if assigned)
+    cabin.spots.forEach(spot => {
+      const spotDiv = document.createElement('div');
+      spotDiv.classList.add('spot');
+      spotDiv.innerHTML = `${spot}`; // Display the spot (e.g., "1: John Doe")
+      cabinDiv.appendChild(spotDiv);
+    });
+
+    cabinsContainer.appendChild(cabinDiv);
+  });
+}
+
+function displayStoredNames() {
+  const namesContainer = document.getElementById('stored-names');
+  const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+  
+  namesContainer.innerHTML = ''; // Clear previous list
+  
+  storedNames.forEach(name => {
+    const nameDiv = document.createElement('div');
+    nameDiv.classList.add('name');
+    nameDiv.innerHTML = name;
+    namesContainer.appendChild(nameDiv);
+  });
+}
+
+function refreshPage() {
+  window.location.reload();
+}
+
+</script> -->
+
+
+
+<!-- <script>
+const cabins = [
+  { cabin: 1, spots: [1, 2, 3, 4, 5, 6], names: [] }, 
+  { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] }, 
+  { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] } 
+];
+
+function storeName() {
+  const nameInput = document.getElementById("name").value.trim();
+
+  let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
+  if (nameInput !== "") {
+    storedNames.push(nameInput);
+    localStorage.setItem('storedNames', JSON.stringify(storedNames));
+    document.getElementById("name").value = ""; // Clear the input field
+    displayStoredNames(); // Display stored names list
+  }
+}
+
+function setCabinSpots(cabinNumber) {
+  const spotsInput = parseInt(document.getElementById(`cabin${cabinNumber}-spots`).value, 10);
+  const cabin = cabins[cabinNumber - 1];
+
+  // Dynamically increase spots if the new input is larger than the current number of spots
+  if (spotsInput > cabin.spots.length) {
+    for (let i = cabin.spots.length + 1; i <= spotsInput; i++) {
+      cabin.spots.push(i); // Add more spots to the cabin
+    }
+  } else if (spotsInput < cabin.spots.length) {
+    cabin.spots = cabin.spots.slice(0, spotsInput); // Remove spots if necessary
+  }
+}
+
+function assignAndDisplayNames() {
+  const cabin1Val = parseInt(document.getElementById("cabin1-spots").value, 10) || 0;
+  const cabin2Val = parseInt(document.getElementById("cabin2-spots").value, 10) || 0;
+  const cabin3Val = parseInt(document.getElementById("cabin3-spots").value, 10) || 0;
+
+  const totalVal = cabin1Val + cabin2Val + cabin3Val;
+
+  if (totalVal === 0) {
+    alert("Please enter the number of spots for each cabin.");
+    return;
+  }
+
+  // Get the stored names
+  const names = JSON.parse(localStorage.getItem('storedNames'));
+  if (!names || names.length === 0) {
+    alert("No names stored! Please store names first.");
+    return;
+  }
+
+  // Ensure the number of names to be assigned does not exceed the available spots
+  if (names.length < totalVal) {
+    alert("Not enough names stored! Please store more names.");
+    return;
+  }
+
+  // Get the shuffled names
+  const shuffledNames = [...names];
+  for (let i = shuffledNames.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
+  }
+
+  // Assign names to cabins, respecting the number of spots available in each cabin
+  let nameIndex = 0;
+
+  cabins.forEach(cabin => {
+    cabin.names = [];
+    for (let i = 0; i < cabin.spots.length && nameIndex < shuffledNames.length; i++) {
+      cabin.names.push(shuffledNames[nameIndex]);
+      nameIndex++;
+    }
+  });
+
+  // After assigning names, rotate the names to the next cabin in the cycle, keeping spot numbers the same
+  rotateNames();
+
+  // Display the updated cabins
+  displayCabins();
+}
+
+function rotateNames() {
+  // Move names from Cabin 1 to Cabin 2, Cabin 2 to Cabin 3, and Cabin 3 to Cabin 1
+  const firstCabinNames = cabins[0].names.slice(); // Make a copy of Cabin 1's names
+  const secondCabinNames = cabins[1].names.slice(); // Make a copy of Cabin 2's names
+  const thirdCabinNames = cabins[2].names.slice(); // Make a copy of Cabin 3's names
+
+  // Rotate the names to the next cabin in the cycle
+  cabins[0].names = secondCabinNames;
+  cabins[1].names = thirdCabinNames;
+  cabins[2].names = firstCabinNames;
+}
+
+function displayCabins() {
+  const cabinsContainer = document.getElementById('cabins');
+  cabinsContainer.innerHTML = ''; // Clear existing display
+
+  // Loop through each cabin and create HTML elements to display
+  cabins.forEach(cabin => {
+    const cabinDiv = document.createElement('div');
+    cabinDiv.classList.add('cabin');
+    cabinDiv.innerHTML = `<strong>Cabin ${cabin.cabin}</strong>`; // Add cabin title
+
+    // Display each spot in the cabin with name (if assigned)
+    cabin.spots.forEach((spot, index) => {
+      const spotDiv = document.createElement('div');
+      spotDiv.classList.add('spot');
+      spotDiv.innerHTML = `${spot}: ${cabin.names[index] || ''}`; // Display the spot and name (if assigned)
+      cabinDiv.appendChild(spotDiv);
+    });
+
+    cabinsContainer.appendChild(cabinDiv);
+  });
+}
+
+function displayStoredNames() {
+  const namesContainer = document.getElementById('stored-names');
+  const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+  
+  namesContainer.innerHTML = ''; // Clear previous list
+  
+  storedNames.forEach(name => {
+    const nameDiv = document.createElement('div');
+    nameDiv.classList.add('name');
+    nameDiv.innerHTML = name;
+    namesContainer.appendChild(nameDiv);
+  });
+}
+
+function refreshPage() {
+  window.location.reload();
+}
+
+</script> -->
+
+<!-- <script>
+  const cabins = [
+  { cabin: 1, spots: [1, 2, 3, 4, 5, 6], names: [] }, 
+  { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] }, 
+  { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] } 
+];
+
+function storeName() {
+  const nameInput = document.getElementById("name").value.trim();
+
+  let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
+  if (nameInput !== "") {
+    storedNames.push(nameInput);
+    localStorage.setItem('storedNames', JSON.stringify(storedNames));
+    document.getElementById("name").value = ""; // Clear the input field
+    displayStoredNames(); // Display stored names list
+  }
+}
+
+function setCabinSpots(cabinNumber) {
+  const spotsInput = parseInt(document.getElementById(`cabin${cabinNumber}-spots`).value, 10);
+  const cabin = cabins[cabinNumber - 1];
+
+  // Dynamically increase spots if the new input is larger than the current number of spots
+  if (spotsInput > cabin.spots.length) {
+    for (let i = cabin.spots.length + 1; i <= spotsInput; i++) {
+      cabin.spots.push(i); // Add more spots to the cabin
+    }
+  } else if (spotsInput < cabin.spots.length) {
+    cabin.spots = cabin.spots.slice(0, spotsInput); // Remove spots if necessary
+  }
+}
+
+function assignAndDisplayNames() {
+  const cabin1Val = parseInt(document.getElementById("cabin1-spots").value, 10) || 0;
+  const cabin2Val = parseInt(document.getElementById("cabin2-spots").value, 10) || 0;
+  const cabin3Val = parseInt(document.getElementById("cabin3-spots").value, 10) || 0;
+
+  const totalVal = cabin1Val + cabin2Val + cabin3Val;
+
+  if (totalVal === 0) {
+    alert("Please enter the number of spots for each cabin.");
+    return;
+  }
+
+  // Get the stored names
+  const names = JSON.parse(localStorage.getItem('storedNames'));
+  if (!names || names.length === 0) {
+    alert("No names stored! Please store names first.");
+    return;
+  }
+
+  // Ensure the number of names to be assigned does not exceed the available spots
+  if (names.length < totalVal) {
+    alert("Not enough names stored! Please store more names.");
+    return;
+  }
+
+  // Get the shuffled names
+  const shuffledNames = [...names];
+  for (let i = shuffledNames.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
+  }
+
+  // Assign names to cabins, respecting the number of spots available in each cabin
+  let nameIndex = 0;
+
+  cabins.forEach(cabin => {
+    cabin.names = [];
+    for (let i = 0; i < cabin.spots.length && nameIndex < shuffledNames.length; i++) {
+      cabin.names.push(shuffledNames[nameIndex]);
+      nameIndex++;
+    }
+  });
+
+  // After assigning names, rotate the names to the next cabin in the cycle, keeping spot numbers the same
+  rotateNames();
+
+  // Display the updated cabins
+  displayCabins();
+}
+
+function rotateNames() {
+  // Move names from Cabin 1 to Cabin 2, Cabin 2 to Cabin 3, and Cabin 3 to Cabin 1
+  const firstCabinNames = cabins[0].names.slice(); // Make a copy of Cabin 1's names
+  const secondCabinNames = cabins[1].names.slice(); // Make a copy of Cabin 2's names
+  const thirdCabinNames = cabins[2].names.slice(); // Make a copy of Cabin 3's names
+
+  // Rotate the names to the next cabin in the cycle
+  cabins[0].names = secondCabinNames;
+  cabins[1].names = thirdCabinNames;
+  cabins[2].names = firstCabinNames;
+}
+
+function displayCabins() {
+  const cabinsContainer = document.getElementById('cabins');
+  cabinsContainer.innerHTML = ''; // Clear existing display
+
+  // Loop through each cabin and create HTML elements to display
+  cabins.forEach(cabin => {
+    const cabinDiv = document.createElement('div');
+    cabinDiv.classList.add('cabin');
+    cabinDiv.innerHTML = `<strong>Cabin ${cabin.cabin}</strong>`; // Add cabin title
+
+    // Display each spot in the cabin with name (if assigned)
+    cabin.spots.forEach((spot, index) => {
+      const spotDiv = document.createElement('div');
+      spotDiv.classList.add('spot');
+      spotDiv.innerHTML = `${spot}: ${cabin.names[index] || ''}`; // Display the spot and name (if assigned)
+      cabinDiv.appendChild(spotDiv);
+    });
+
+    cabinsContainer.appendChild(cabinDiv);
+  });
+}
+
+function displayStoredNames() {
+  const namesContainer = document.getElementById('stored-names');
+  const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+  
+  namesContainer.innerHTML = ''; // Clear previous list
+  
+  storedNames.forEach(name => {
+    const nameDiv = document.createElement('div');
+    nameDiv.classList.add('name');
+    nameDiv.innerHTML = name;
+    namesContainer.appendChild(nameDiv);
+  });
+}
+
+function refreshPage() {
+  window.location.reload();
+}
+
+</script> -->
+
+<script>
+ const cabins = [
+  { cabin: 1, spots: [1, 2, 3, 4, 5, 6], names: [] },
+  { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] },
+  { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] }
+];
+
+function storeName() {
+  const nameInput = document.getElementById("name").value.trim();
+
+  let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
+  if (nameInput !== "") {
+    storedNames.push(nameInput);
+    localStorage.setItem('storedNames', JSON.stringify(storedNames));
+    document.getElementById("name").value = ""; // Clear the input field
+    displayStoredNames(); // Display stored names list
+  }
+}
+
+function setCabinSpots(cabinNumber) {
+  const spotsInput = parseInt(document.getElementById(`cabin${cabinNumber}-spots`).value, 10);
+  const cabin = cabins[cabinNumber - 1];
+
+  // Dynamically increase spots if the new input is larger than the current number of spots
+  if (spotsInput > cabin.spots.length) {
+    for (let i = cabin.spots.length + 1; i <= spotsInput; i++) {
+      cabin.spots.push(i); // Add more spots to the cabin
+    }
+  } else if (spotsInput < cabin.spots.length) {
+    cabin.spots = cabin.spots.slice(0, spotsInput); // Remove spots if necessary
+    cabin.names = cabin.names.slice(0, spotsInput); // Also remove names beyond the new spot count
+  }
+  displayCabins(); // Call displayCabins to update the UI after changing spots
+}
+
+function assignAndDisplayNames() {
+  const cabin1Val = parseInt(document.getElementById("cabin1-spots").value, 10) || 0;
+  const cabin2Val = parseInt(document.getElementById("cabin2-spots").value, 10) || 0;
+  const cabin3Val = parseInt(document.getElementById("cabin3-spots").value, 10) || 0;
+
+  const totalVal = cabin1Val + cabin2Val + cabin3Val;
+
+  if (totalVal === 0) {
+    alert("Please enter the number of spots for each cabin.");
+    return;
+  }
+
+  // Get the stored names
+  const names = JSON.parse(localStorage.getItem('storedNames'));
+  if (!names || names.length === 0) {
+    alert("No names stored! Please store names first.");
+    return;
+  }
+
+  // Ensure the number of names to be assigned does not exceed the available spots
+  if (names.length < totalVal) {
+    alert("Not enough names stored! Please store more names.");
+    return;
+  }
+
+  // Get the shuffled names
+  const shuffledNames = [...names];
+  for (let i = shuffledNames.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
+  }
+
+  // Assign names to cabins, respecting the number of spots available in each cabin
+  let nameIndex = 0;
+
+  cabins.forEach(cabin => {
+    cabin.names = [];
+    for (let i = 0; i < cabin.spots.length && nameIndex < shuffledNames.length; i++) {
+      cabin.names.push(shuffledNames[nameIndex]);
+      nameIndex++;
+    }
+  });
+
+  // After assigning names, rotate the names to the next cabin in the cycle, keeping spot numbers the same
+  rotateNames();
+
+  // Display the updated cabins
+  displayCabins();
+}
+
+function rotateNames() {
+  // Move names from Cabin 1 to Cabin 2, Cabin 2 to Cabin 3, and Cabin 3 to Cabin 1
+  const firstCabinNames = cabins[0].names.slice(); // Make a copy of Cabin 1's names
+  const secondCabinNames = cabins[1].names.slice(); // Make a copy of Cabin 2's names
+  const thirdCabinNames = cabins[2].names.slice(); // Make a copy of Cabin 3's names
+
+  // Rotate the names to the next cabin in the cycle
+  cabins[0].names = secondCabinNames;
+  cabins[1].names = thirdCabinNames;
+  cabins[2].names = firstCabinNames;
+}
+
+function displayCabins() {
+  const cabinsContainer = document.getElementById('cabins');
+  cabinsContainer.innerHTML = ''; // Clear existing display
+
+  // Loop through each cabin and create HTML elements to display
+  cabins.forEach(cabin => {
+    const cabinDiv = document.createElement('div');
+    cabinDiv.classList.add('cabin');
+    cabinDiv.innerHTML = `<strong>Cabin ${cabin.cabin}</strong>`; // Add cabin title
+
+    // Display each spot in the cabin with name (if assigned)
+    cabin.spots.forEach((spot, index) => {
+      const spotDiv = document.createElement('div');
+      spotDiv.classList.add('spot');
+      spotDiv.innerHTML = `${spot}: ${cabin.names[index] || ''}`; // Display the spot and name (if assigned)
+      cabinDiv.appendChild(spotDiv);
+    });
+
+    cabinsContainer.appendChild(cabinDiv);
+  });
+}
+
+function displayStoredNames() {
+  const namesContainer = document.getElementById('stored-names');
+  const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
+  namesContainer.innerHTML = ''; // Clear previous list
+
+  storedNames.forEach(name => {
+    const nameDiv = document.createElement('div');
+    nameDiv.classList.add('name');
+    nameDiv.innerHTML = name;
+    namesContainer.appendChild(nameDiv);
+  });
+}
+</script>
+</body>
+</html>
