@@ -6,20 +6,24 @@
 }
 body{
     height: 100vh;
+    background-color: black;
+    color: white;
 }
 input{
-    flex: 1;
+    width: 200px;
     border: none;
     outline: none;
-    background: transparent;
+    background: white;
+    border-radius: 50px;
     padding: 10px;
     font-weight: 14px;
+    margin-right: 15px;
 }
 #submit-btn{
     margin-left: 150px;
     /* margin-top: 50px; */
  }
-button{
+.btn{
     border: none;
     outline: none;
     padding: 10px 20px;
@@ -29,13 +33,47 @@ button{
     cursor: pointer;
     border-radius: 40px;
 }
-.cabin {
+#cabin1-spots ,#cabin2-spots , #cabin3-spots{
+    margin-top: 10px;
+}
+#cabins{
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+.cabin {
+    height: 100%;
+    width: 100px;
     margin: 10px;
     padding: 10px;
-    border: 2px solid #000;
+    border: 2px solid white;
+    background-color:;
   }
   .cabin .spot {
     margin: 5px;
+    align-items: center;
+    /* text-align: center;     */
   }
+#main-box{
+    display: flex;
+    align-items: center;
+}
+#main-box div{
+    padding-left: 20px;
+}
+.newbtn{
+    /* height: 50px; */
+    /* width: 25px; */
+    padding: 2px 4px;
+    color: #ff5945;
+}
+ul{
+    display: flex;
+    align-items: center;
+}
+li{
+    list-style: none;
+    padding-left: 5px;
+    padding-right: 5px;
+}

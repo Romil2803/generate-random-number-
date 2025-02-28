@@ -3,18 +3,19 @@ const cabins = [
   { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] },
   { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] }
 ];
+const namesListUl = document.getElementById('stored-names-list');
+displayStoredNamesList();
 
 function storeName() {
   const nameInput = document.getElementById("name").value.trim();
-
   let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
-
   if (nameInput !== "") {
     storedNames.push(nameInput);
     localStorage.setItem('storedNames', JSON.stringify(storedNames));
     document.getElementById("name").value = ""; 
-    displayStoredNames(); 
+    
   }
+  localStorage.removeItem(key);
 }
 
 function setCabinSpots(cabinNumber) {
@@ -55,7 +56,10 @@ function assignAndDisplayNames() {
     return;
   }
 
-  const shuffledNames = [...names];
+  const nameToIgnore = 'OK1';
+  const filteredNames =  names.filter(name => name !== nameToIgnore);
+
+  const shuffledNames = [...filteredNames];
   for (let i = shuffledNames.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
@@ -72,19 +76,19 @@ function assignAndDisplayNames() {
   });
   
   displayCabins();
-  // rotateNames();
+  rotateNames();
 
 }
 
-// function rotateNames() {
-//   const firstCabinNames = cabins[0].names.slice(); 
-//   const secondCabinNames = cabins[1].names.slice(); 
-//   const thirdCabinNames = cabins[2].names.slice();
+function rotateNames() {
+  const firstCabinNames = cabins[0].names.slice(); 
+  const secondCabinNames = cabins[1].names.slice(); 
+  const thirdCabinNames = cabins[2].names.slice();
 
-//   // cabins[0].names = secondCabinNames;
-//   // cabins[1].names = thirdCabinNames;
-//   // cabins[2].names = firstCabinNames;
-// }
+  cabins[0].names = secondCabinNames;
+  cabins[1].names = thirdCabinNames;
+  cabins[2].names = firstCabinNames;
+}
 
 function displayCabins() {
   const cabinsContainer = document.getElementById('cabins');
@@ -95,10 +99,10 @@ function displayCabins() {
     cabinDiv.classList.add('cabin');
     cabinDiv.innerHTML = `Cabin ${cabin.cabin}`; 
 
-    cabin.spots.forEach((spot, index) => {
+    cabin.spots.forEach((spot, i) => {
       const spotDiv = document.createElement('div');
       spotDiv.classList.add('spot');
-      spotDiv.innerHTML = `${spot}: ${cabin.names[index] || ''}`; 
+      spotDiv.innerHTML = `${spot} : ${cabin.names[i] || ''}`; 
       cabinDiv.appendChild(spotDiv);
     });
 
@@ -109,13 +113,52 @@ function displayCabins() {
 function displayStoredNames() {
   const namesContainer = document.getElementById('stored-names');
   const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
-
   namesContainer.innerHTML = ''; 
-
   storedNames.forEach(name => {
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('name');
     nameDiv.innerHTML = name;
     namesContainer.appendChild(nameDiv);
+  });
+}
+
+// function displayStoredNamesList() {
+//   const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+//   namesListUl.innerHTML = "Stored Names:";
+//   storedNames.forEach(name => {
+//     const nameSpan = document.createElement("li");
+//     nameSpan.textContent = name;
+//     namesListUl.appendChild(nameSpan);
+//     const newbtn = document.createElement("button");
+//     newbtn.innerHTML = "\u00d7";
+//     newbtn.classList.add("newbtn");
+//     namesListUl.appendChild(newbtn);
+
+//   });
+// }
+
+function displayStoredNamesList() {
+  const storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+  namesListUl.innerHTML = "Stored Names:";
+  
+  storedNames.forEach((name, index) => {
+    const nameSpan = document.createElement("li");
+    nameSpan.textContent = name;
+    namesListUl.appendChild(nameSpan);
+
+    const newbtn = document.createElement("button");
+    newbtn.innerHTML = "\u00d7";
+    newbtn.classList.add("newbtn");
+
+    newbtn.addEventListener("click", () => {
+
+      storedNames.splice(index, 1);
+
+      localStorage.setItem('storedNames', JSON.stringify(storedNames));
+
+      displayStoredNamesList();
+    });
+
+    namesListUl.appendChild(newbtn);
   });
 }
