@@ -9,6 +9,10 @@ body{
     background-color: black;
     color: white;
 }
+.heading{
+    text-align: center;
+    margin: 20px 0;
+}
 input{
     width: 200px;
     border: none;
@@ -43,12 +47,12 @@ input{
     margin-bottom: 20px;
 }
 .cabin {
-    height: 100%;
+    /* height: 100%; */
     width: 100px;
     margin: 10px;
     padding: 10px;
     border: 2px solid white;
-    background-color:;
+    /* background-color:; */
   }
   .cabin .spot {
     margin: 5px;
@@ -76,4 +80,8 @@ li{
     list-style: none;
     padding-left: 5px;
     padding-right: 5px;
+}
+.cabin-set h1{
+    font-size: 20px;
+
 }

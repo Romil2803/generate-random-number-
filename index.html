@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <h1>Cabin Seating</h1>
+  <h1 class="heading">Cabin Seating</h1>
   
   <div id="main-box">
     <input type="text" id="name" placeholder="Enter name">
@@ -16,32 +16,23 @@
   </div>
 
   <label for="cabin1-spots">Cabin 1 (Enter number of spots):</label>
-  <input type="number" id="cabin1-spots" placeholder="Enter spots for Cabin 1" min="1" max="6" value="6">
-  <button onclick="setCabinSpots(1)" class="btn">Set Cabin 1 Spots</button>
+  <input type="number" id="cabin1-spots" placeholder="Enter spots for Cabin 1" min="1" max="6" value="">
 
   <br><br>
 
   <label for="cabin2-spots">Cabin 2 (Enter number of spots):</label>
-  <input type="number" id="cabin2-spots" placeholder="Enter spots for Cabin 2" min="1" max="6" value="6">
-  <button onclick="setCabinSpots(2)" class="btn">Set Cabin 2 Spots</button>
+  <input type="number" id="cabin2-spots" placeholder="Enter spots for Cabin 2" min="1" max="6" value="">
 
   <br><br>
 
   <label for="cabin3-spots">Cabin 3 (Enter number of spots):</label>
-  <input type="number" id="cabin3-spots" placeholder="Enter spots for Cabin 3" min="1" max="6" value="6">
-  <button onclick="setCabinSpots(3)" class="btn">Set Cabin 3 Spots</button>
+  <input type="number" id="cabin3-spots" placeholder="Enter spots for Cabin 3" min="1" max="6" value="">
+  <button onclick="setCabinSpots()" class="btn">Set Cabin Spots</button>
   <button id="submit-btn" class="btn" onclick="assignAndDisplayNames()">Submit</button> <br>
   <div id="cabins"></div>
   <ul id="stored-names-list"></ul>
 
-<script>
-  const input = document.getElementById("name");
-  const btn = document.getElementById("btn");
-  btn.addEventListener("click",()=>{
-    const value= input.value;
-    console.log(value);
-  })
-</script>
   <script src="./js/app.js"></script>
+  <!-- <script src="./js/app2.js"></script> -->
 </body>
 </html>
