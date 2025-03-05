@@ -16,10 +16,11 @@ const cabins = [
   ]
 ];
 const namesListUl = document.getElementById('stored-names-list');
-displayStoredNamesList();
 
 let cabinSetIndex = 0; // Track which set of cabins to fill
 let clickCount = 0; // Track number of clicks
+let checkboxChecked = false;
+displayStoredNamesList();
 let initialized = false;
 
 function storeName() {
@@ -54,10 +55,19 @@ function setCabinSpots() {
   cabinSetIndex = 0;
   clickCount = 0;
   alert("Cabin spots updated. Cycle will restart.");
+  displayCabins(); 
 }
+// Handling checkbox change
+document.addEventListener("DOMContentLoaded", function() {
+  const checkbox = document.getElementById("checkbox");
+  if (checkbox) {
+    checkbox.addEventListener("change", function() {
+      checkboxChecked = checkbox.checked;
+    });
+  }
+});
 
-
-function assignAndDisplayNames(){
+function assignAndDisplayNames() {
   let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
   if (storedNames.length === 0) {
     alert("No names stored! Please store names first.");
@@ -65,43 +75,58 @@ function assignAndDisplayNames(){
   }
 
   const totalSpots = cabins[cabinSetIndex].reduce((acc, cabin) => acc + cabin.spots.length, 0);
-  
+
   if (storedNames.length < totalSpots) {
     alert("Not enough names stored! Please store more names.");
     return;
   }
 
-  // Shuffle names for randomness
-  const shuffledNames = [...storedNames];
-  for (let i = shuffledNames.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledNames[i], shuffledNames[j]] = [shuffledNames[j], shuffledNames[i]];
-  }
+  let shuffledNames = [...storedNames];
 
-  let nameIndex = 0;
-  
+  function getRandomName(cabinIdx, setIdx) {
+    if(checkboxChecked){
+      let availableNames = shuffledNames.filter(name => !previousCabinCheck(name, cabinIdx, setIdx));
+    if (availableNames.length === 0) {
+      availableNames = [...shuffledNames];
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableNames.length);
+    const randomName = availableNames[randomIndex];
+    shuffledNames.splice(shuffledNames.indexOf(randomName), 1);
+    return randomName;
+    }
+   else{
+    const randomIndex = Math.floor(Math.random() * shuffledNames.length);
+    const randomName = shuffledNames[randomIndex];
+    shuffledNames.splice(randomIndex, 1);
+    return randomName;
+   }
+  }
   if (clickCount < 3) {
-    // First three clicks: Just fill one set per click
-    cabins[clickCount].forEach(cabin => {
+    cabins[clickCount].forEach((cabin, cabinIdx) => {
       cabin.names = [];
       for (let i = 0; i < cabin.spots.length; i++) {
-        cabin.names.push(shuffledNames[nameIndex]);
-        nameIndex++;
+        if (checkboxChecked) {
+          cabin.names.push(getRandomName(cabinIdx, clickCount));
+        } else {
+          cabin.names.push(getRandomName());
+        }
       }
     });
   } else {
-    // Fourth click and beyond: Rotate sets and reshuffle Set 3
     cabins[0] = JSON.parse(JSON.stringify(cabins[1]));
     cabins[1] = JSON.parse(JSON.stringify(cabins[2]));
-    
-    // Shuffle names within Set 3 without clearing
+
     let set3Names = [...cabins[2].flatMap(cabin => cabin.names)];
-    for (let i = set3Names.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [set3Names[i], set3Names[j]] = [set3Names[j], set3Names[i]];
+
+    for (let i = 0; i < set3Names.length; i++) {
+      let cabinIdx = Math.floor(i / 6);
+      set3Names[i] = checkboxChecked
+        ? getRandomName(cabinIdx, clickCount)
+        : getRandomName();
     }
 
-    nameIndex = 0;
+    let nameIndex = 0;
     cabins[2].forEach(cabin => {
       cabin.names = [];
       for (let i = 0; i < cabin.spots.length; i++) {
@@ -110,23 +135,15 @@ function assignAndDisplayNames(){
       }
     });
   }
+
   clickCount++;
   displayCabins();
-  rotateNames();
 }
-function rotateNames() {
-  const firstCabinNames = cabins[0].flatMap(cabin => cabin.names).slice(); 
-  const secondCabinNames = cabins[1].flatMap(cabin => cabin.names).slice(); 
-  const thirdCabinNames = cabins[2].flatMap(cabin => cabin.names).slice();
 
-  cabins[0].names = secondCabinNames;
-  cabins[1].names = thirdCabinNames;
-  cabins[2].names = firstCabinNames;
-
-  // console.log(cabins[0]);
-  // console.log(cabins[1]);
-  // console.log(cabins[2]);
+function previousCabinCheck(name, cabinIdx, excludeSetIdx) {
+  return cabins.some((set, idx) => idx !== excludeSetIdx && set[cabinIdx].names.includes(name));
 }
+
 function displayCabins() {
   const cabinsContainer = document.getElementById('cabins');
   cabinsContainer.innerHTML = '';

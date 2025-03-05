@@ -23,10 +23,10 @@ input{
     font-weight: 14px;
     margin-right: 15px;
 }
-#submit-btn{
+/* #submit-btn{
     margin-left: 150px;
-    /* margin-top: 50px; */
- }
+
+ } */
 .btn{
     border: none;
     outline: none;
@@ -67,8 +67,6 @@ input{
     padding-left: 20px;
 }
 .newbtn{
-    /* height: 50px; */
-    /* width: 25px; */
     padding: 2px 4px;
     color: #ff5945;
 }
@@ -84,4 +82,10 @@ li{
 .cabin-set h1{
     font-size: 20px;
 
+}
+#checkbox{
+    width: 20px !important;
+}
+.submit-box{
+    margin-top: 20px;
 }
