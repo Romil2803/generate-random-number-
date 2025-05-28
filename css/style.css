@@ -1,150 +1,38 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+.cabin h4 {
+    @apply text-primary-light dark:text-indigo-300 font-semibold mb-3;
 }
 
-body {
-    height: 100vh;
-    background-color: #121212;
-    color: #fff;
-    padding: 20px;
+.spot {
+    @apply my-1 py-1 border-b border-gray-100 dark:border-gray-600 last:border-0;
 }
 
-.heading {
-    text-align: center;
-    margin: 30px 0;
-    font-size: 32px;
-    font-weight: bold;
-    color: #ff5945;
+#stored-names-list li {
+    @apply bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 px-3 py-1 rounded-full inline-flex items-center;
 }
 
-#main-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-input[type="text"],
-input[type="number"] {
-    width: 220px;
-    border: none;
-    outline: none;
-    background: white;
-    border-radius: 30px;
-    padding: 10px 15px;
-    font-size: 14px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-
-button.btn {
-    border: none;
-    outline: none;
-    padding: 10px 20px;
-    background: #ff5945;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 40px;
-    transition: background 0.3s ease;
-}
-
-button.btn:hover {
-    background: #ff3d2e;
-}
-
-#cabin1-spots,
-#cabin2-spots,
-#cabin3-spots {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.submit-box {
-    text-align: center;
-    margin-top: 20px;
-}
-
-#checkbox {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-#cabins {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 40px;
-    gap: 30px;
-}
-
-.cabin-set {
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid #444;
-    min-width: 250px;
-}
-
-.cabin-set h1 {
-    font-size: 20px;
-    margin-bottom: 15px;
-    color: #ffa38f;
-    text-align: center;
+.cabin-set h2 {
+    @apply text-gray-800 dark:text-gray-100;
 }
 
 .cabin {
-    margin: 10px 0;
-    padding: 10px;
-    border: 2px dashed #ff5945;
-    border-radius: 10px;
+    @apply my-4 p-4 border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-lg;
 }
 
-.cabin h4 {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #ff826c;
+svg {
+    @apply text-gray-700 dark:text-gray-300;
 }
 
-.cabin .spot {
-    margin: 5px 0;
-    font-size: 14px;
+@keyframes highlight {
+    0% { background-color: rgba(99, 102, 241, 0.3); }
+    100% { background-color: transparent; }
 }
 
-ul#stored-names-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    list-style: none;
-    margin-top: 30px;
-    gap: 10px;
+.highlight {
+    animation: highlight 1.5s ease-out;
 }
 
-ul#stored-names-list li {
-    background-color: #333;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-.newbtn {
-    padding: 2px 6px;
-    background: none;
-    border: none;
-    color: #ff5945;
-    cursor: pointer;
-    font-size: 14px;
-    margin-left: 5px;
+#stored-names-list li {
+    @apply bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 px-3 py-1 rounded-full inline-flex items-center;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
