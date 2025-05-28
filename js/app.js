@@ -26,12 +26,18 @@ let initialized = false;
 function storeName() {
   const nameInput = document.getElementById("name").value.trim();
   let storedNames = JSON.parse(localStorage.getItem('storedNames')) || [];
+
   if (nameInput !== "") {
     storedNames.push(nameInput);
     localStorage.setItem('storedNames', JSON.stringify(storedNames));
-    document.getElementById("name").value = "";  
+    document.getElementById("name").value = "";
+
+    displayStoredNamesList();
+
+    document.getElementById("name").focus();
   }
 }
+
 
 function setCabinSpots() {
   const cabin1Spots = parseInt(document.getElementById("cabin1-spots").value, 10);

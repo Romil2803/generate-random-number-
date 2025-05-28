@@ -29,9 +29,12 @@
   <input type="number" id="cabin3-spots" placeholder="Enter spots for Cabin 3" min="1" max="6" value="">
   <button onclick="setCabinSpots()" class="btn">Set Cabin Spots</button> <br>
   <div class="submit-box">
-  <label for="checkbox">if you want to assign names cabin randomly every time</label>
-  <input type="checkbox" name="checkbox" id="checkbox">
-  <button onclick="assignAndDisplayNames()" id="submit-btn" class="btn">Submit</button>
+    <label for="checkbox">
+      Assign names to cabins randomly every time:
+    </label>
+    <input type="checkbox" id="checkbox">
+
+    <button onclick="assignAndDisplayNames()" id="submit-btn" class="btn">Submit</button>
   </div>
   <div id="cabins"></div>
   <ul id="stored-names-list"></ul>
