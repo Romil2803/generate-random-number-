@@ -4,20 +4,24 @@ function getStoredNamesCount() {
 }
 const cabins = [
   [
-    { cabin: 1, spots: [1, 2, 3, 4, 5, 6], names: [] },
+    { cabin: 1, spots: [1, 2, 3, 4, 5], names: [] },
     { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] },
-    { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] }
+    { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] },
+    { cabin: 4, spots: [1, 2, 3, 4, 5, 6], names: [] }
   ],
   [
-    { cabin: 1, spots: [1, 2, 3, 4, 5, 6], names: [] },
+    { cabin: 1, spots: [1, 2, 3, 4, 5], names: [] },
     { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] },
-    { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] }
+    { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] },
+    { cabin: 4, spots: [1, 2, 3, 4, 5, 6], names: [] }
   ],
   [
-    { cabin: 1, spots: [1, 2, 3, 4, 5, 6], names: [] },
+    { cabin: 1, spots: [1, 2, 3, 4, 5], names: [] },
     { cabin: 2, spots: [1, 2, 3, 4, 5, 6], names: [] },
-    { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] }
-  ]
+    { cabin: 3, spots: [1, 2, 3, 4, 5, 6], names: [] },
+    { cabin: 4, spots: [1, 2, 3, 4, 5, 6], names: [] }
+  ],
+
 ];
 const namesListUl = document.getElementById('stored-names-list');
 
@@ -78,11 +82,12 @@ function storeName() {
 
 
 function setCabinSpots() {
-  const cabin1Spots = parseInt(document.getElementById("cabin1-spots").value, 10);
+  const cabin1Spots = parseInt(document.getElementById("cabin1-spots").value, 5);
   const cabin2Spots = parseInt(document.getElementById("cabin2-spots").value, 10);
   const cabin3Spots = parseInt(document.getElementById("cabin3-spots").value, 10);
-  
-  if (!cabin1Spots || !cabin2Spots || !cabin3Spots) {
+  const cabin4Spots = parseInt(document.getElementById("cabin4-spots").value, 10);
+
+  if (!cabin1Spots || !cabin2Spots || !cabin3Spots|| !cabin4Spots) {
     alert("Please enter valid spots for all three cabins.");
     return;
   }
@@ -91,6 +96,7 @@ function setCabinSpots() {
     set[0].spots = Array.from({ length: cabin1Spots }, (_, i) => i + 1);
     set[1].spots = Array.from({ length: cabin2Spots }, (_, i) => i + 1);
     set[2].spots = Array.from({ length: cabin3Spots }, (_, i) => i + 1);
+    set[3].spots = Array.from({ length: cabin4Spots }, (_, i) => i + 1);
     set.forEach(cabin => cabin.names = []);
   });
   
